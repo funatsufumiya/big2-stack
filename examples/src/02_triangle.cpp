@@ -8,6 +8,8 @@
 #include <big2.h>
 #include <cstdint>
 
+#include <bgfx/platform.h>
+
 #include <glm/glm.hpp>
 #include <big2/bgfx/embedded_shader.h>
 #include <generated/shaders/examples/all.h>
@@ -41,6 +43,10 @@ int main(std::int32_t, gsl::zstring[]) {
   init_object.resolution.width = window_resolution.x;
   init_object.resolution.height = window_resolution.y;
   init_object.resolution.reset = BGFX_RESET_VSYNC;
+
+  // Call bgfx::renderFrame before bgfx::init to signal to bgfx not to create a render thread.
+	// Most graphics APIs must be used on the same thread that created the window.
+  bgfx::renderFrame();
 
   big2::Validate(bgfx::init(init_object), "BGFX couldn't be initialized");
 

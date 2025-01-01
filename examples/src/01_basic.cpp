@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
 #include <bx/bx.h>
 
 #include <GLFW/glfw3.h>
@@ -35,6 +36,10 @@ int main(std::int32_t, gsl::zstring[]) {
   init_object.resolution.width = window_resolution.x;
   init_object.resolution.height = window_resolution.y;
   init_object.resolution.reset = BGFX_RESET_VSYNC;
+
+  // Call bgfx::renderFrame before bgfx::init to signal to bgfx not to create a render thread.
+	// Most graphics APIs must be used on the same thread that created the window.
+  bgfx::renderFrame();
 
   big2::Validate(bgfx::init(init_object), "BGFX couldn't be initialized");
   const bgfx::ViewId main_view_id = big2::ReserveViewId();
